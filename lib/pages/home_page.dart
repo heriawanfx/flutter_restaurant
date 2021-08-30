@@ -35,7 +35,21 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.search_outlined))
           ],
         ),
-        body: _buildFuture(context));
+        body: ListView(children: [
+          Text(
+            "Dicoding Restaurant",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          TextField(
+            onChanged: (value) {
+              Future.delayed(Duration(seconds: 1), () {
+                provider.setQuery(value);
+              });
+            },
+            decoration: InputDecoration(border: OutlineInputBorder()),
+          ),
+          _buildFuture(context)
+        ]));
   }
 }
 
@@ -82,6 +96,7 @@ Widget _buildFuture(BuildContext context) {
 
 Widget _buildListItem(BuildContext context, List<Restaurant> restaurants) {
   return ListView.builder(
+      shrinkWrap: true,
       itemCount: restaurants.length,
       itemBuilder: (context, index) {
         final _restaurant = restaurants[index];

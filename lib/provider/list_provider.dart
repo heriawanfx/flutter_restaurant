@@ -18,7 +18,7 @@ class ListProvider extends ChangeNotifier {
 
   void setQuery(String value) {
     this._query = value;
-    notifyListeners();
+    fetchRestaurants();
   }
 
   Future<void> fetchRestaurants() async {

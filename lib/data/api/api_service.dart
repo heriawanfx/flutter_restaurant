@@ -13,7 +13,15 @@ class ApiService {
   factory ApiService() => _instance ?? ApiService._internal();
 
   Future<List<Restaurant>> getRestaurants(String query) async {
-    Uri uri = Uri.https(Constant.baseUrl, Constant.pathList, {'q': query});
+    String path = Constant.pathList;
+    Map<String, dynamic>? queryParams = {};
+
+    if (query.isNotEmpty) {
+      path = Constant.pathSearch;
+      queryParams = {'q': query};
+    }
+
+    Uri uri = Uri.https(Constant.baseUrl, path, queryParams);
     http.Response response = await http.get(uri);
 
     if (response.statusCode == 200) {
