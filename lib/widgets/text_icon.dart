@@ -16,14 +16,18 @@ class TextIcon extends StatelessWidget {
         Icon(
           iconData,
           size: size,
-          color: Colors.blueGrey,
         ),
         SizedBox(
           width: 4,
         ),
-        Text(
-          "$text",
-          style: TextStyle(fontSize: size),
+        Expanded(
+          child: Text(
+            "$text",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: size,
+            ),
+          ),
         ),
       ],
     );

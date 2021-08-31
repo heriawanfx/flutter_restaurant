@@ -13,9 +13,21 @@ class ListProvider extends ChangeNotifier {
   String? _message = "Empty Data";
   String? get message => this._message;
 
+  bool _isSearchMode = false;
+  bool get isSearchMode => this._isSearchMode;
+  void setSearchMode(bool active) {
+    this._isSearchMode = active;
+
+    if (!active) {
+      setQuery("");
+      fetchRestaurants();
+    } else {
+      notifyListeners();
+    }
+  }
+
   String _query = "";
   String get query => this._query;
-
   void setQuery(String value) {
     this._query = value;
     fetchRestaurants();

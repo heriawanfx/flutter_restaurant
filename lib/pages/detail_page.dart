@@ -3,6 +3,7 @@ import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/data/response/result_state.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
+import 'package:flutter_restaurant/utils/context_helper.dart';
 import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -41,6 +42,7 @@ class DetailPage extends StatelessWidget {
             final _menu = _restaurant?.menus;
             final _foods = _menu?.foods;
             final _drinks = _menu?.drinks;
+            final _reviews = _restaurant?.customerReviews;
 
             if (_restaurant == null) {
               return Center(
@@ -52,43 +54,21 @@ class DetailPage extends StatelessWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [_buildSliverAppBar(_restaurant)];
               },
-              body: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: _buildDescription(_restaurant),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        "Foods",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                    ),
-                    _buildFoodList(_foods),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        "Drinks",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                    ),
-                    _buildDrinkList(_drinks),
-                  ],
-                ),
+              body: ListView(
+                children: [
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildDescription(_restaurant),
+                  ),
+                  _buildGroupList(_foods, Type.Food),
+                  _buildGroupList(_drinks, Type.Drink),
+                  _reviews == null || _reviews.isEmpty
+                      ? Container()
+                      : _buildReviewList(context, _reviews)
+                ],
               ),
             );
         }
@@ -96,7 +76,7 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  SliverAppBar _buildSliverAppBar(Restaurant _restaurant) {
+  Widget _buildSliverAppBar(Restaurant _restaurant) {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 250,
@@ -115,7 +95,7 @@ class DetailPage extends StatelessWidget {
   }
 }
 
-Column _buildDescription(Restaurant _restaurant) {
+Widget _buildDescription(Restaurant _restaurant) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -147,98 +127,112 @@ Column _buildDescription(Restaurant _restaurant) {
   );
 }
 
-Widget _buildFoodList(List<Name>? foods) {
-  if (foods == null) {
+enum Type { Food, Drink }
+
+Widget _buildGroupList(List<Name>? list, Type type) {
+  if (list == null) {
     return SizedBox(
       height: 0,
     );
   }
 
-  return Container(
-    height: 120,
-    child: ListView.builder(
-        padding: const EdgeInsets.only(left: 13),
-        scrollDirection: Axis.horizontal,
-        itemCount: foods.length,
-        itemBuilder: (context, index) {
-          return _buildFoodCard(foods[index]);
-        }),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SizedBox(
+        height: 16,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          type == Type.Food ? "Makanan" : "Minuman",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+      ),
+      Container(
+        height: 120,
+        child: ListView.builder(
+            padding: const EdgeInsets.only(left: 13),
+            scrollDirection: Axis.horizontal,
+            itemCount: list.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  context.showSnackbar("Fitur ini belum tersedia");
+                },
+                child: Card(
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    color: Colors.grey[400],
+                    width: 120,
+                    child: Stack(children: [
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: Icon(
+                            type == Type.Food
+                                ? Icons.ramen_dining_outlined
+                                : Icons.local_cafe_outlined,
+                            color: Colors.white,
+                          )),
+                      Align(
+                        child: Text(
+                          "${list[index].name}",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        alignment: Alignment.bottomLeft,
+                      ),
+                    ]),
+                  ),
+                ),
+              );
+            }),
+      ),
+    ],
   );
 }
 
-Card _buildFoodCard(Name food) {
-  return Card(
-    elevation: 0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(4),
-    ),
-    child: Container(
-      padding: const EdgeInsets.all(8),
-      color: Colors.grey[400],
-      width: 120,
-      child: Stack(children: [
-        Align(
-            alignment: Alignment.topRight,
-            child: Icon(
-              Icons.ramen_dining_outlined,
-              color: Colors.white,
-            )),
-        Align(
-          child: Text(
-            "${food.name}",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          alignment: Alignment.bottomLeft,
+Widget _buildReviewList(BuildContext context, List<CustomerReview> reviews) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SizedBox(
+        height: 16,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Text(
+          "Ulasan Pengguna",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-      ]),
-    ),
-  );
-}
+      ),
+      ListView.builder(
+          shrinkWrap: true,
+          itemCount: reviews.length,
+          itemBuilder: (context, index) {
+            final _review = reviews[index];
 
-Widget _buildDrinkList(List<Name>? drinks) {
-  if (drinks == null) {
-    return SizedBox(
-      height: 0,
-    );
-  }
-  return Container(
-    height: 120,
-    child: ListView.builder(
-        padding: const EdgeInsets.only(left: 13),
-        scrollDirection: Axis.horizontal,
-        itemCount: drinks.length,
-        itemBuilder: (context, index) {
-          return _buildDrinkCard(drinks[index]);
-        }),
-  );
-}
-
-Card _buildDrinkCard(Name drink) {
-  return Card(
-    elevation: 0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(4),
-    ),
-    child: Container(
-      padding: const EdgeInsets.all(8),
-      color: Colors.grey[400],
-      width: 120,
-      child: Stack(children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: Icon(
-            Icons.local_cafe_outlined,
-            color: Colors.white,
-          ),
-        ),
-        Align(
-          child: Text(
-            "${drink.name}",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          alignment: Alignment.bottomLeft,
-        ),
-      ]),
-    ),
+            return ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+              title: Text(
+                "${_review.name}",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              subtitle: Column(
+                children: [
+                  TextIcon(
+                      iconData: Icons.comment_outlined, text: _review.review),
+                  TextIcon(
+                      iconData: Icons.calendar_today_outlined,
+                      text: _review.date)
+                ],
+              ),
+            );
+          }),
+    ],
   );
 }

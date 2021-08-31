@@ -75,6 +75,26 @@ class Name {
       };
 }
 
+class Menus {
+  Menus({
+    required this.foods,
+    required this.drinks,
+  });
+
+  List<Name> foods;
+  List<Name> drinks;
+
+  factory Menus.fromJson(Map<String, dynamic> json) => Menus(
+        foods: List<Name>.from(json["foods"].map((x) => Name.fromJson(x))),
+        drinks: List<Name>.from(json["drinks"].map((x) => Name.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "foods": List<dynamic>.from(foods.map((x) => x.toJson())),
+        "drinks": List<dynamic>.from(drinks.map((x) => x.toJson())),
+      };
+}
+
 class CustomerReview {
   CustomerReview({
     required this.name,
@@ -96,25 +116,5 @@ class CustomerReview {
         "name": name,
         "review": review,
         "date": date,
-      };
-}
-
-class Menus {
-  Menus({
-    required this.foods,
-    required this.drinks,
-  });
-
-  List<Name> foods;
-  List<Name> drinks;
-
-  factory Menus.fromJson(Map<String, dynamic> json) => Menus(
-        foods: List<Name>.from(json["foods"].map((x) => Name.fromJson(x))),
-        drinks: List<Name>.from(json["drinks"].map((x) => Name.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "foods": List<dynamic>.from(foods.map((x) => x.toJson())),
-        "drinks": List<dynamic>.from(drinks.map((x) => x.toJson())),
       };
 }

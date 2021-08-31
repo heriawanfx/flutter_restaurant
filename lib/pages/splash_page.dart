@@ -14,8 +14,8 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   Future _startTime() async {
-    var duration = new Duration(seconds: 2);
-    return new Timer(duration, _navigateToHome);
+    var duration = Duration(seconds: 2);
+    return Timer(duration, _navigateToHome);
   }
 
   void _navigateToHome() {
