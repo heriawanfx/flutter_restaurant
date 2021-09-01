@@ -32,7 +32,7 @@ class DetailProvider extends ChangeNotifier {
       _restaurant = result;
     } catch (e) {
       _state = ResultState.Error;
-      _error = 'Error: $e';
+      _error = "$e";
     } finally {
       notifyListeners();
     }

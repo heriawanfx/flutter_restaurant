@@ -20,7 +20,6 @@ class DetailPage extends StatelessWidget {
           case ResultState.Loading:
             return Center(child: const CircularProgressIndicator());
           case ResultState.Error:
-            context.showSnackbar("${provider.error}");
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -28,12 +27,22 @@ class DetailPage extends StatelessWidget {
                   Icon(
                     Icons.running_with_errors_outlined,
                     color: Colors.red,
-                    size: 40,
+                    size: 100,
                   ),
+                  SizedBox(height: 16),
                   Text(
                     "Ada masalah saat memuat data",
-                    style: TextStyle(color: Colors.red),
                   ),
+                  Text(
+                    "${provider.error}",
+                    style: TextStyle(color: Colors.red, fontSize: 12),
+                  ),
+                  SizedBox(height: 16),
+                  OutlinedButton(
+                      onPressed: () {
+                        provider.fetchRestaurantDetail();
+                      },
+                      child: const Text("Coba Lagi"))
                 ],
               ),
             );

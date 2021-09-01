@@ -48,7 +48,7 @@ class ListProvider extends ChangeNotifier {
       _restaurants = result;
     } catch (e) {
       _state = ResultState.Error;
-      _error = 'Error: $e';
+      _error = "$e";
     } finally {
       notifyListeners();
     }

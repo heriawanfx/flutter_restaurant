@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
@@ -107,7 +105,6 @@ List<Widget> _buildSearchAction(BuildContext context) {
 
 Widget _buildFuture(BuildContext context, ListProvider provider) {
   if (provider.state == ResultState.Error) {
-    context.showSnackbar("${provider.error}");
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -115,12 +112,22 @@ Widget _buildFuture(BuildContext context, ListProvider provider) {
           Icon(
             Icons.running_with_errors_outlined,
             color: Colors.red,
-            size: 40,
+            size: 100,
           ),
+          SizedBox(height: 16),
           Text(
             "Ada masalah saat memuat data",
-            style: TextStyle(color: Colors.red),
           ),
+          Text(
+            "${provider.error}",
+            style: TextStyle(color: Colors.red, fontSize: 12),
+          ),
+          SizedBox(height: 16),
+          OutlinedButton(
+              onPressed: () {
+                provider.fetchRestaurants();
+              },
+              child: const Text("Coba Lagi"))
         ],
       ),
     );
