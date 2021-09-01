@@ -20,6 +20,7 @@ class DetailPage extends StatelessWidget {
           case ResultState.Loading:
             return Center(child: const CircularProgressIndicator());
           case ResultState.Error:
+            context.showSnackbar("${provider.error}");
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +31,7 @@ class DetailPage extends StatelessWidget {
                     size: 40,
                   ),
                   Text(
-                    "${provider.error}",
+                    "Ada masalah saat memuat data",
                     style: TextStyle(color: Colors.red),
                   ),
                 ],
@@ -44,9 +45,7 @@ class DetailPage extends StatelessWidget {
             final _reviews = _restaurant?.customerReviews;
 
             if (_restaurant == null) {
-              return Center(
-                child: Text("Restaurant tidak tersedia"),
-              );
+              return Center(child: Text("Restaurant tidak tersedia"));
             }
 
             return NestedScrollView(
@@ -55,9 +54,6 @@ class DetailPage extends StatelessWidget {
               },
               body: ListView(
                 children: [
-                  SizedBox(
-                    height: 16,
-                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: _buildDescription(_restaurant),
@@ -77,19 +73,20 @@ class DetailPage extends StatelessWidget {
 
   Widget _buildSliverAppBar(Restaurant _restaurant) {
     return SliverAppBar(
+      title: Text("${_restaurant.name}"),
       pinned: true,
       expandedHeight: 250,
       brightness: Brightness.dark,
       flexibleSpace: FlexibleSpaceBar(
         background: Hero(
-            tag: "${_restaurant.id}",
-            child: FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: "${Constant.baseImageUrl}/${_restaurant.pictureId}",
-              fit: BoxFit.cover,
-            )),
+          tag: "${_restaurant.id}",
+          child: FadeInImage.memoryNetwork(
+            placeholder: kTransparentImage,
+            image: "${Constant.baseImageUrl}/${_restaurant.pictureId}",
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
-      title: Text("${_restaurant.name}"),
     );
   }
 }
@@ -98,14 +95,11 @@ Widget _buildDescription(Restaurant _restaurant) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("${_restaurant.name}",
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-              color: Colors.blueGrey)),
-      SizedBox(
-        height: 4,
+      Text(
+        "${_restaurant.name}",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
       ),
+      SizedBox(height: 4),
       Text(
         "${_restaurant.description}",
         textAlign: TextAlign.justify,
@@ -125,8 +119,11 @@ Widget _buildDescription(Restaurant _restaurant) {
       SizedBox(
         height: 16,
       ),
-      Text("Kategori",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+      Text(
+        "Kategori",
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 18, color: Colors.blueGrey),
+      ),
       _restaurant.categories == null || _restaurant.categories!.isEmpty
           ? Container()
           : Container(
@@ -136,15 +133,15 @@ Widget _buildDescription(Restaurant _restaurant) {
                 scrollDirection: Axis.horizontal,
                 children: _restaurant.categories == null
                     ? []
-                    : _restaurant.categories!
-                        .map((e) => Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: ActionChip(
-                                label: Text("${e.name}"),
-                                onPressed: () {},
-                              ),
-                            ))
-                        .toList(),
+                    : _restaurant.categories!.map((category) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: ActionChip(
+                            label: Text("${category.name}"),
+                            onPressed: () {},
+                          ),
+                        );
+                      }).toList(),
               ),
             )
     ],
@@ -155,9 +152,7 @@ enum Type { Food, Drink }
 
 Widget _buildGroupList(List<Name>? list, Type type) {
   if (list == null) {
-    return SizedBox(
-      height: 0,
-    );
+    return SizedBox(height: 0);
   }
 
   return Column(
@@ -170,7 +165,10 @@ Widget _buildGroupList(List<Name>? list, Type type) {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Text(
           type == Type.Food ? "Makanan" : "Minuman",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.blueGrey),
         ),
       ),
       Container(
@@ -195,13 +193,14 @@ Widget _buildGroupList(List<Name>? list, Type type) {
                     width: 120,
                     child: Stack(children: [
                       Align(
-                          alignment: Alignment.topRight,
-                          child: Icon(
-                            type == Type.Food
-                                ? Icons.ramen_dining_outlined
-                                : Icons.local_cafe_outlined,
-                            color: Colors.white,
-                          )),
+                        alignment: Alignment.topRight,
+                        child: Icon(
+                          type == Type.Food
+                              ? Icons.ramen_dining_outlined
+                              : Icons.local_cafe_outlined,
+                          color: Colors.white,
+                        ),
+                      ),
                       Align(
                         child: Text(
                           "${list[index].name}",
@@ -231,7 +230,10 @@ Widget _buildReviewList(BuildContext context, List<CustomerReview> reviews) {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Text(
           "Ulasan Pengguna",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.blueGrey),
         ),
       ),
       ListView.builder(
