@@ -137,8 +137,13 @@ Widget _buildDescription(Restaurant _restaurant) {
                 children: _restaurant.categories == null
                     ? []
                     : _restaurant.categories!
-                        .map((e) => ChoiceChip(
-                            label: Text("${e.name}"), selected: true))
+                        .map((e) => Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: ActionChip(
+                                label: Text("${e.name}"),
+                                onPressed: () {},
+                              ),
+                            ))
                         .toList(),
               ),
             )
