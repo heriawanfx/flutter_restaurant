@@ -4,14 +4,18 @@ import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/data/response/result_state.dart';
 
 class ListProvider extends ChangeNotifier {
+  ListProvider() {
+    fetchRestaurants();
+  }
+
   List<Restaurant> _restaurants = [];
   List<Restaurant> get restaurants => this._restaurants;
 
   ResultState _state = ResultState.Loading;
   ResultState get state => this._state;
 
-  String? _message = "Empty Data";
-  String? get message => this._message;
+  String? _error = "Ada masalah";
+  String? get error => this._error;
 
   bool _isSearchMode = false;
   bool get isSearchMode => this._isSearchMode;
@@ -44,7 +48,7 @@ class ListProvider extends ChangeNotifier {
       _restaurants = result;
     } catch (e) {
       _state = ResultState.Error;
-      _message = 'Error: $e';
+      _error = 'Error: $e';
     } finally {
       notifyListeners();
     }

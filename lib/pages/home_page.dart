@@ -17,8 +17,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ListProvider>().fetchRestaurants();
-
     return Consumer<ListProvider>(builder: (context, provider, _) {
       return WillPopScope(
         onWillPop: () async {
@@ -34,7 +32,6 @@ class HomePage extends StatelessWidget {
                 ? _buildSearchBar(context)
                 : _buildDefaultTitleBar(context),
             leadingWidth: provider.isSearchMode ? 56 : 0,
-            titleSpacing: 10,
             leading: provider.isSearchMode
                 ? _buildBackLeading(context)
                 : _buildDefaultLeading(),
@@ -65,6 +62,7 @@ Widget _buildDefaultTitleBar(BuildContext context) {
 
 Widget _buildSearchBar(BuildContext context) {
   return TextField(
+    textInputAction: TextInputAction.search,
     autofocus: true,
     cursorColor: Colors.white,
     decoration: InputDecoration(
@@ -73,10 +71,8 @@ Widget _buildSearchBar(BuildContext context) {
       hintStyle: TextStyle(color: Colors.white54),
     ),
     style: TextStyle(color: Colors.white, fontSize: 16.0),
-    onChanged: (query) {
-      Future.delayed(Duration(seconds: 2), () {
-        context.read<ListProvider>().setQuery(query);
-      });
+    onSubmitted: (query) {
+      context.read<ListProvider>().setQuery(query);
     },
   );
 }
@@ -99,12 +95,19 @@ List<Widget> _buildDefaultAction(BuildContext context) {
 }
 
 List<Widget> _buildSearchAction(BuildContext context) {
-  return <Widget>[];
+  return <Widget>[
+    IconButton(
+      icon: const Icon(Icons.close_outlined),
+      onPressed: () {
+        context.read<ListProvider>().setSearchMode(false);
+      },
+    ),
+  ];
 }
 
 Widget _buildFuture(BuildContext context, ListProvider provider) {
   if (provider.state == ResultState.Error) {
-    context.showSnackbar("${provider.message}");
+    context.showSnackbar("${provider.error}");
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +179,7 @@ Widget _buildListItem(BuildContext context, List<Restaurant> restaurants) {
           ),
           onTap: () {
             Navigator.pushNamed(context, DetailPage.routeName);
-            context.read<DetailProvider>().setSelectedId(_restaurant.id!);
+            context.read<DetailProvider>().setSelectedId("${_restaurant.id}");
           },
         );
       });

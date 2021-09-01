@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/data/response/result_state.dart';
@@ -13,8 +14,6 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<DetailProvider>().fetchRestaurantDetail();
-
     return Scaffold(
       body: Consumer<DetailProvider>(builder: (context, provider, _) {
         switch (provider.state) {
@@ -31,7 +30,7 @@ class DetailPage extends StatelessWidget {
                     size: 40,
                   ),
                   Text(
-                    "${provider.message}",
+                    "${provider.error}",
                     style: TextStyle(color: Colors.red),
                   ),
                 ],
@@ -122,7 +121,27 @@ Widget _buildDescription(Restaurant _restaurant) {
       TextIcon(
           iconData: Icons.star_outline_outlined,
           text: _restaurant.rating.toString(),
-          size: 15)
+          size: 15),
+      SizedBox(
+        height: 16,
+      ),
+      Text("Kategori",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+      _restaurant.categories == null || _restaurant.categories!.isEmpty
+          ? Container()
+          : Container(
+              height: 50,
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: _restaurant.categories == null
+                    ? []
+                    : _restaurant.categories!
+                        .map((e) => ChoiceChip(
+                            label: Text("${e.name}"), selected: true))
+                        .toList(),
+              ),
+            )
     ],
   );
 }

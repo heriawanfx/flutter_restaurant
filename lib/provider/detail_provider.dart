@@ -7,15 +7,15 @@ class DetailProvider extends ChangeNotifier {
   Restaurant? _restaurant;
   Restaurant? get restaurant => this._restaurant;
 
-  String? _message = "Empty Data";
-  String? get message => this._message;
+  String? _error = "Ada masalah";
+  String? get error => this._error;
 
-  String _selectedId = "";
+  String _selectedId = "0";
   String? get selectedId => this._selectedId;
 
   void setSelectedId(String value) {
     this._selectedId = value;
-    notifyListeners();
+    fetchRestaurantDetail();
   }
 
   ResultState _state = ResultState.Loading;
@@ -32,7 +32,7 @@ class DetailProvider extends ChangeNotifier {
       _restaurant = result;
     } catch (e) {
       _state = ResultState.Error;
-      _message = 'Error: $e';
+      _error = 'Error: $e';
     } finally {
       notifyListeners();
     }
