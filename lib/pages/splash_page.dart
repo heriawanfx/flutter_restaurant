@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_restaurant/common/constant.dart';
+import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/pages/home_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _navigateToHome() {
-    Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+    Navigation.pushNamed(HomePage.routeName, replacement: true);
   }
 
   @override

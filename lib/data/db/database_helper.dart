@@ -16,7 +16,7 @@ class DatabaseHelper {
   final String _createQuery = '''CREATE TABLE $_tblFavorite (
              id TEXT PRIMARY KEY,
              name TEXT,
-             description TEXT
+             description TEXT,
              city TEXT,
              address TEXT,
              pictureId TEXT,
@@ -39,6 +39,14 @@ class DatabaseHelper {
           await batch.commit();
         }
       },
+      onDowngrade: (db, oldVersion, newVersion) async {
+        final batch = db.batch();
+
+        if (oldVersion != newVersion) {
+          _migrateFavorite(batch);
+          await batch.commit();
+        }
+      },
       version: 1,
     );
 
@@ -46,13 +54,8 @@ class DatabaseHelper {
   }
 
   void _migrateFavorite(Batch batch) {
-    batch.execute("ALTER TABLE $_tblFavorite RENAME TO ${_tblFavorite}_old");
+    batch.execute("DROP TABLE $_tblFavorite");
     batch.execute(_createQuery);
-    batch.execute(
-        '''INSERT INTO $_tblFavorite(id, name, description, city, address, rating, pictureId, rating)
-          SELECT * FROM ${_tblFavorite}_old
-          ''');
-    batch.execute("DROP TABLE ${_tblFavorite}_old");
   }
 
   Future<Database?> get database async {
@@ -78,13 +81,13 @@ class DatabaseHelper {
     return iterable.toList();
   }
 
-  Future<Map> getFavorited(String id) async {
+  Future<Map> getFavorited(Restaurant restaurant) async {
     final db = await database;
 
     List<Map<String, dynamic>> results = await db!.query(
       _tblFavorite,
       where: 'id = ?',
-      whereArgs: [id],
+      whereArgs: [restaurant.id],
     );
 
     if (results.isNotEmpty) {
@@ -94,13 +97,13 @@ class DatabaseHelper {
     }
   }
 
-  Future<bool> removeFavorite(String id) async {
+  Future<bool> removeFavorite(Restaurant restaurant) async {
     final db = await database;
 
     int deleted = await db!.delete(
       _tblFavorite,
       where: 'id = ?',
-      whereArgs: [id],
+      whereArgs: [restaurant.id],
     );
 
     return deleted > 0;

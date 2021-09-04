@@ -4,6 +4,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_restaurant/common/constant.dart';
+import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/db/database_helper.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
 import 'package:flutter_restaurant/pages/home_page.dart';
@@ -52,9 +53,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-            create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()))
+            create: (_) => DatabaseProvider(DatabaseHelper()))
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: Constant.appName,
         theme: ThemeData(primarySwatch: Colors.blueGrey),
         debugShowCheckedModeBanner: false,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
+import 'package:flutter_restaurant/provider/database_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/utils/context_ext.dart';
@@ -18,7 +19,9 @@ class DetailPage extends StatelessWidget {
       body: Consumer<DetailProvider>(builder: (context, provider, _) {
         switch (provider.state) {
           case ResultState.Loading:
-            return Center(child: const CircularProgressIndicator());
+            return Center(
+              child: const CircularProgressIndicator(),
+            );
           case ResultState.Error:
             return Center(
               child: Column(
@@ -35,10 +38,11 @@ class DetailPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   OutlinedButton(
-                      onPressed: () {
-                        provider.fetchRestaurantDetail();
-                      },
-                      child: const Text("Coba Lagi"))
+                    onPressed: () {
+                      provider.fetchRestaurantDetail();
+                    },
+                    child: const Text("Coba Lagi"),
+                  )
                 ],
               ),
             );
@@ -50,12 +54,16 @@ class DetailPage extends StatelessWidget {
             final _reviews = _restaurant?.customerReviews;
 
             if (_restaurant == null) {
-              return Center(child: Text("Restaurant tidak tersedia"));
+              return Center(
+                child: Text("Restaurant tidak tersedia"),
+              );
             }
 
             return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [_buildSliverAppBar(_restaurant)];
+                return [
+                  _buildSliverAppBar(_restaurant),
+                ];
               },
               body: ListView(
                 children: [
@@ -76,22 +84,38 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSliverAppBar(Restaurant _restaurant) {
-    return SliverAppBar(
-      title: Text("${_restaurant.name}"),
-      pinned: true,
-      expandedHeight: 250,
-      brightness: Brightness.dark,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Hero(
-          tag: "${_restaurant.id}",
-          child: FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: "${Constant.baseImageUrl}/${_restaurant.pictureId}",
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
+  Widget _buildSliverAppBar(Restaurant restaurant) {
+    return Consumer<DatabaseProvider>(
+      builder: (context, provider, _) {
+        return FutureBuilder(
+          future: provider.isFavorited(restaurant),
+          builder: (context, snapshot) {
+            bool isFavorited = snapshot.hasData && snapshot.data == true;
+            return SliverAppBar(
+                title: Text("${restaurant.name}"),
+                pinned: true,
+                expandedHeight: 250,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Hero(
+                    tag: "${restaurant.id}",
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: "${Constant.baseImageUrl}/${restaurant.pictureId}",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        provider.toggleFavorite(
+                            restaurant, isFavorited);
+                      },
+                      icon: Icon(isFavorited ? Icons.favorite : Icons.favorite_outline))
+                ]);
+          },
+        );
+      },
     );
   }
 }
