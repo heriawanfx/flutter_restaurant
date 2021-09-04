@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_restaurant/common/constant.dart';
+import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
@@ -180,7 +181,7 @@ Widget _buildListItem(BuildContext context, List<Restaurant> restaurants) {
             ],
           ),
           onTap: () {
-            Navigator.pushNamed(context, DetailPage.routeName);
+            Navigation.pushNamed(DetailPage.routeName);
             context.read<DetailProvider>().setSelectedId("${_restaurant.id}");
           },
         );
