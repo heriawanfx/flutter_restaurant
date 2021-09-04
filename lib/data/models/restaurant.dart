@@ -23,40 +23,69 @@ class Restaurant {
   Menus? menus;
   List<CustomerReview>? customerReviews = [];
 
-  factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        city: json["city"],
-        address: json["address"],
-        pictureId: json["pictureId"],
-        rating: json["rating"].toDouble(),
-        categories: json["categories"] == null
-            ? null
-            : List<Name>.from(json["categories"].map((x) => Name.fromJson(x))),
-        menus: json["menus"] == null ? null : Menus.fromJson(json["menus"]),
-        customerReviews: json["customerReviews"] == null
-            ? null
-            : List<CustomerReview>.from(
-                json["customerReviews"].map((x) => CustomerReview.fromJson(x))),
-      );
+  factory Restaurant.fromJson(Map<String, dynamic> json) {
+    return Restaurant(
+      id: json["id"],
+      name: json["name"],
+      description: json["description"],
+      city: json["city"],
+      address: json["address"],
+      pictureId: json["pictureId"],
+      rating: json["rating"].toDouble(),
+      categories: json["categories"] == null
+          ? null
+          : List<Name>.from(json["categories"].map((x) => Name.fromJson(x))),
+      menus: json["menus"] == null ? null : Menus.fromJson(json["menus"]),
+      customerReviews: json["customerReviews"] == null
+          ? null
+          : List<CustomerReview>.from(json["customerReviews"].map((x) {
+              return CustomerReview.fromJson(x);
+            })),
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "description": description,
-        "city": city,
-        "address": address,
-        "pictureId": pictureId,
-        "menus": menus?.toJson(),
-        "categories": categories == null
-            ? null
-            : List<dynamic>.from(categories!.map((x) => x.toJson())),
-        "rating": rating,
-        "customerReviews": customerReviews == null
-            ? null
-            : List<dynamic>.from(customerReviews!.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "description": description,
+      "city": city,
+      "address": address,
+      "pictureId": pictureId,
+      "menus": menus?.toJson(),
+      "categories": categories == null
+          ? null
+          : List<dynamic>.from(categories!.map((x) => x.toJson())),
+      "rating": rating,
+      "customerReviews": customerReviews == null
+          ? null
+          : List<dynamic>.from(customerReviews!.map((x) => x.toJson())),
+    };
+  }
+
+  factory Restaurant.fromDatabase(Map<String, dynamic> json) {
+    return Restaurant(
+      id: json["id"],
+      name: json["name"],
+      description: json["description"],
+      city: json["city"],
+      address: json["address"],
+      pictureId: json["pictureId"],
+      rating: json["rating"],
+    );
+  }
+
+  Map<String, dynamic> toDatabase() {
+    return {
+      "id": id,
+      "name": name,
+      "description": description,
+      "city": city,
+      "address": address,
+      "pictureId": pictureId,
+      "rating": rating,
+    };
+  }
 }
 
 class Name {

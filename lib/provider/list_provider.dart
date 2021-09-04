@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_restaurant/data/api/api_service.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:flutter_restaurant/data/response/result_state.dart';
+import 'package:flutter_restaurant/utils/result_state.dart';
 
 class ListProvider extends ChangeNotifier {
   ListProvider() {

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:flutter_restaurant/data/response/result_state.dart';
+import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
-import 'package:flutter_restaurant/utils/context_helper.dart';
 import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -117,10 +116,6 @@ Widget _buildFuture(BuildContext context, ListProvider provider) {
           SizedBox(height: 16),
           Text(
             "Ada masalah saat memuat data",
-          ),
-          Text(
-            "${provider.error}",
-            style: TextStyle(color: Colors.red, fontSize: 12),
           ),
           SizedBox(height: 16),
           OutlinedButton(
