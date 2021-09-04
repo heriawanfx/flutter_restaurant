@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restaurant/common/constant.dart';
-import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
-import 'package:flutter_restaurant/pages/detail_page.dart';
-import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
-import 'package:flutter_restaurant/widgets/text_icon.dart';
+import 'package:flutter_restaurant/widgets/restaurant_tile.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatelessWidget {
-  static const routeName = '/home';
+  static const String title = 'Beranda';
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +50,7 @@ Widget _buildBackLeading(BuildContext context) {
 }
 
 Widget _buildDefaultTitleBar(BuildContext context) {
-  return const Text(Constant.appName);
+  return const Text(HomePage.title);
 }
 
 Widget _buildSearchBar(BuildContext context) {
@@ -155,35 +150,6 @@ Widget _buildListItem(BuildContext context, List<Restaurant> restaurants) {
       itemBuilder: (context, index) {
         final _restaurant = restaurants[index];
 
-        return ListTile(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          leading: Hero(
-            tag: "${_restaurant.id}",
-            child: FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: "${Constant.baseImageUrl}/${_restaurant.pictureId}",
-              fit: BoxFit.cover,
-              width: 70,
-            ),
-          ),
-          title: Text(
-            "${_restaurant.name}",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
-          subtitle: Column(
-            children: [
-              TextIcon(
-                  iconData: Icons.room_outlined, text: "${_restaurant.city}"),
-              TextIcon(
-                  iconData: Icons.star_outline_outlined,
-                  text: _restaurant.rating.toString())
-            ],
-          ),
-          onTap: () {
-            Navigation.pushNamed(DetailPage.routeName);
-            context.read<DetailProvider>().setSelectedId("${_restaurant.id}");
-          },
-        );
+        return RestaurantTile(restaurant: _restaurant);
       });
 }

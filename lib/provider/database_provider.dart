@@ -22,14 +22,13 @@ class DatabaseProvider extends ChangeNotifier {
     return bookmarkedArticle.isNotEmpty;
   }
 
-  void toggleFavorite(Restaurant restaurant, bool isFavorited)  {
+  void toggleFavorite(Restaurant restaurant, bool isFavorited) {
     try {
       if (isFavorited) {
-         _databaseHelper.removeFavorite(restaurant);
+        _databaseHelper.removeFavorite(restaurant);
       } else {
         _databaseHelper.insertFavorite(restaurant);
       }
-
     } catch (e) {
       print("Error on toggleFavorite : $e");
     } finally {

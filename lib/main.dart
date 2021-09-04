@@ -7,7 +7,7 @@ import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/db/database_helper.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
-import 'package:flutter_restaurant/pages/home_page.dart';
+import 'package:flutter_restaurant/pages/main_page.dart';
 import 'package:flutter_restaurant/pages/splash_page.dart';
 import 'package:flutter_restaurant/provider/database_provider.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
         initialRoute: SplashPage.routeName,
         routes: {
           SplashPage.routeName: (c) => SplashPage(),
-          HomePage.routeName: (c) => HomePage(),
+          MainPage.routeName: (c) => MainPage(),
           DetailPage.routeName: (c) => DetailPage()
         },
       ),

@@ -10,7 +10,7 @@ class PreferenceProvider extends ChangeNotifier {
   }
 
   bool _isDailyReminder = false;
-  bool get isDailyNewsActive => _isDailyReminder;
+  bool get isReminderDaily => _isDailyReminder;
 
   void _getDailyReminder() async {
     _isDailyReminder = await preferencesHelper.isDailyNewsActive;
