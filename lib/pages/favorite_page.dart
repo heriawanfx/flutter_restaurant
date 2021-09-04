@@ -19,7 +19,7 @@ class FavoritePage extends StatelessWidget {
 
   Widget _buildList() {
     return Consumer<DatabaseProvider>(
-      builder: (context, provider, child) {
+      builder: (context, provider, _) {
         if (provider.favorites.isNotEmpty) {
           return ListView.builder(
             itemCount: provider.favorites.length,

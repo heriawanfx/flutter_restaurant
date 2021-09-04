@@ -3,9 +3,9 @@ import 'package:flutter_restaurant/data/db/database_helper.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 
 class DatabaseProvider extends ChangeNotifier {
-  DatabaseHelper _databaseHelper;
+  DatabaseHelper databaseHelper;
 
-  DatabaseProvider(this._databaseHelper) {
+  DatabaseProvider({required this.databaseHelper}) {
     _getFavorites();
   }
 
@@ -13,21 +13,21 @@ class DatabaseProvider extends ChangeNotifier {
   List<Restaurant> get favorites => _favorites;
 
   void _getFavorites() async {
-    _favorites = await _databaseHelper.getFavorites();
+    _favorites = await databaseHelper.getFavorites();
     notifyListeners();
   }
 
   Future<bool> isFavorited(Restaurant restaurant) async {
-    final bookmarkedArticle = await _databaseHelper.getFavorited(restaurant);
+    final bookmarkedArticle = await databaseHelper.getFavorited(restaurant);
     return bookmarkedArticle.isNotEmpty;
   }
 
   void toggleFavorite(Restaurant restaurant, bool isFavorited) {
     try {
       if (isFavorited) {
-        _databaseHelper.removeFavorite(restaurant);
+        databaseHelper.removeFavorite(restaurant);
       } else {
-        _databaseHelper.insertFavorite(restaurant);
+        databaseHelper.insertFavorite(restaurant);
       }
     } catch (e) {
       print("Error on toggleFavorite : $e");

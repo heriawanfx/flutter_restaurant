@@ -43,8 +43,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ListProvider>(create: (_) => ListProvider()),
-        ChangeNotifierProvider<DetailProvider>(create: (_) => DetailProvider()),
+        ChangeNotifierProvider<ListProvider>(
+          create: (_) => ListProvider(),
+        ),
+        ChangeNotifierProvider<DetailProvider>(
+          create: (_) => DetailProvider(),
+        ),
         ChangeNotifierProvider(
           create: (_) => PreferenceProvider(
             preferencesHelper: PreferencesHelper(
@@ -53,7 +57,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-            create: (_) => DatabaseProvider(DatabaseHelper()))
+          create: (_) => DatabaseProvider(
+            databaseHelper: DatabaseHelper(),
+          ),
+        )
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

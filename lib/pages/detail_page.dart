@@ -107,11 +107,12 @@ class DetailPage extends StatelessWidget {
                 ),
                 actions: [
                   IconButton(
-                      onPressed: () {
-                        provider.toggleFavorite(
-                            restaurant, isFavorited);
-                      },
-                      icon: Icon(isFavorited ? Icons.favorite : Icons.favorite_outline))
+                    onPressed: () {
+                      provider.toggleFavorite(restaurant, isFavorited);
+                    },
+                    icon: Icon(
+                        isFavorited ? Icons.favorite : Icons.favorite_outline),
+                  )
                 ]);
           },
         );
@@ -234,7 +235,9 @@ Widget _buildGroupList(List<Name>? list, Type type) {
                         child: Text(
                           "${list[index].name}",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         alignment: Alignment.bottomLeft,
                       ),
@@ -260,9 +263,10 @@ Widget _buildReviewList(BuildContext context, List<CustomerReview> reviews) {
         child: Text(
           "Ulasan Pengguna",
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.blueGrey),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Colors.blueGrey,
+          ),
         ),
       ),
       ListView.builder(
@@ -272,18 +276,26 @@ Widget _buildReviewList(BuildContext context, List<CustomerReview> reviews) {
             final _review = reviews[index];
 
             return ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+              ),
               title: Text(
                 "${_review.name}",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
               subtitle: Column(
                 children: [
                   TextIcon(
-                      iconData: Icons.comment_outlined, text: _review.review),
+                    iconData: Icons.comment_outlined,
+                    text: _review.review,
+                  ),
                   TextIcon(
-                      iconData: Icons.calendar_today_outlined,
-                      text: _review.date)
+                    iconData: Icons.calendar_today_outlined,
+                    text: _review.date,
+                  )
                 ],
               ),
             );

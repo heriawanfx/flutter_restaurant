@@ -22,27 +22,28 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildList(BuildContext context) {
     return Consumer<PreferenceProvider>(
-      builder: (context, provider, child) {
+      builder: (context, provider, _) {
         return ListView(
           children: [
             Material(
               child: ListTile(
-                  title: Text("Scheduling News"),
-                  trailing: Consumer<ReminderProvider>(
-                    builder: (context, reminder, _) {
-                      return Switch.adaptive(
-                        value: provider.isReminderDaily,
-                        onChanged: (value) async {
-                          if (Platform.isIOS) {
-                            context.showSnackbar("Fitur ini belum tersedia");
-                          } else {
-                            provider.setDailyRemainder(value);
-                            reminder.setReminder(value);
-                          }
-                        },
-                      );
-                    },
-                  )),
+                title: Text("Daily Reminder"),
+                trailing: Consumer<ReminderProvider>(
+                  builder: (context, reminder, _) {
+                    return Switch(
+                      value: provider.isReminderDaily,
+                      onChanged: (value) async {
+                        if (Platform.isAndroid) {
+                          provider.setDailyRemainder(value);
+                          reminder.setReminder(value);
+                        } else {
+                          context.showSnackbar("Fitur ini belum tersedia");
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
             )
           ],
         );

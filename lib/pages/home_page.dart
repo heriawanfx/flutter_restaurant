@@ -115,10 +115,11 @@ Widget _buildFuture(BuildContext context, ListProvider provider) {
           ),
           SizedBox(height: 16),
           OutlinedButton(
-              onPressed: () {
-                provider.fetchRestaurants();
-              },
-              child: const Text("Coba Lagi"))
+            onPressed: () {
+              provider.fetchRestaurants();
+            },
+            child: const Text("Coba Lagi"),
+          )
         ],
       ),
     );

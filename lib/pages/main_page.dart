@@ -30,11 +30,18 @@ class _MainPageState extends State<MainPage> {
   }
 
   final _bottomNavBarItems = [
-    BottomNavigationBarItem(icon: Icon(Icons.home), label: HomePage.title),
     BottomNavigationBarItem(
-        icon: Icon(Icons.favorite), label: FavoritePage.title),
+      icon: Icon(Icons.home),
+      label: HomePage.title,
+    ),
     BottomNavigationBarItem(
-        icon: Icon(Icons.settings), label: SettingsPage.title),
+      icon: Icon(Icons.favorite),
+      label: FavoritePage.title,
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.settings),
+      label: SettingsPage.title,
+    ),
   ];
 
   final _listWidgets = [
