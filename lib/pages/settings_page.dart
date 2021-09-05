@@ -25,26 +25,31 @@ class SettingsPage extends StatelessWidget {
       builder: (context, provider, _) {
         return ListView(
           children: [
-            Material(
-              child: ListTile(
-                title: Text("Daily Reminder"),
-                trailing: Consumer<ReminderProvider>(
-                  builder: (context, reminder, _) {
-                    return Switch(
-                      value: provider.isReminderDaily,
-                      onChanged: (value) async {
-                        if (Platform.isAndroid) {
-                          provider.setDailyRemainder(value);
-                          reminder.setReminder(value);
+            ListTile(
+              title: Text("Pengingat harian"),
+              subtitle: Text("Terima rekomendasi restoran setiap pukul 11.00"),
+              trailing: Consumer<ReminderProvider>(
+                builder: (context, reminder, _) {
+                  return Switch(
+                    value: provider.isReminderDaily,
+                    onChanged: (isChecked) async {
+                      if (Platform.isAndroid) {
+                        provider.setDailyRemainder(isChecked);
+                        reminder.setReminder(isChecked);
+                        if (isChecked) {
+                          context.showSnackbar("Pengingat harian telah aktif",
+                              isSuccess: true);
                         } else {
-                          context.showSnackbar("Fitur ini belum tersedia");
+                          context.showSnackbar("Pengingat harian dibatalkan");
                         }
-                      },
-                    );
-                  },
-                ),
+                      } else {
+                        context.showSnackbar("Fitur ini belum tersedia");
+                      }
+                    },
+                  );
+                },
               ),
-            )
+            ),
           ],
         );
       },

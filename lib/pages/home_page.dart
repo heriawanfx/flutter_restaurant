@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
+import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/restaurant_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -76,15 +77,28 @@ List<Widget> _buildDefaultAction(BuildContext context) {
       icon: const Icon(Icons.search_outlined),
       onPressed: () {
         context.read<ListProvider>().setSearchMode(true);
+        context.read<ListProvider>().setSearchMode(true);
       },
     ),
-    IconButton(
-      icon: const Icon(Icons.refresh_outlined),
-      onPressed: () {
+    RefreshAction(
+      onRefresh: () {
         context.read<ListProvider>().fetchRestaurants();
       },
     ),
   ];
+}
+
+class RefreshAction extends StatelessWidget {
+  final void Function() onRefresh;
+  const RefreshAction({Key? key, required this.onRefresh}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.refresh_outlined),
+      onPressed: onRefresh,
+    );
+  }
 }
 
 List<Widget> _buildSearchAction(BuildContext context) {
@@ -100,29 +114,7 @@ List<Widget> _buildSearchAction(BuildContext context) {
 
 Widget _buildFuture(BuildContext context, ListProvider provider) {
   if (provider.state == ResultState.Error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.running_with_errors_outlined,
-            color: Colors.red,
-            size: 100,
-          ),
-          SizedBox(height: 16),
-          Text(
-            "Ada masalah saat memuat data",
-          ),
-          SizedBox(height: 16),
-          OutlinedButton(
-            onPressed: () {
-              provider.fetchRestaurants();
-            },
-            child: const Text("Coba Lagi"),
-          )
-        ],
-      ),
-    );
+    return ErrorStateWidget(onTryAgain: () => provider.fetchRestaurants());
   }
 
   if (provider.state == ResultState.Success) {

@@ -1,15 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_restaurant/data/api/api_service.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
+import 'package:flutter_restaurant/provider/state_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 
-class ListProvider extends ChangeNotifier {
-  ResultState _state = ResultState.Loading;
-  ResultState get state => this._state;
-
-  String? _error = "Ada masalah";
-  String? get error => this._error;
-
+class ListProvider extends StateProvider {
   ListProvider() {
     fetchRestaurants();
   }
@@ -38,17 +32,17 @@ class ListProvider extends ChangeNotifier {
   }
 
   Future<void> fetchRestaurants() async {
-    _state = ResultState.Loading;
+    state = ResultState.Loading;
     notifyListeners();
 
     try {
       final result = await ApiService().getRestaurants(_query);
 
-      _state = ResultState.Success;
+      state = ResultState.Success;
       _restaurants = result;
     } catch (e) {
-      _state = ResultState.Error;
-      _error = "Error: $e";
+      state = ResultState.Error;
+      error = "$e";
       print("Error : $e");
     } finally {
       notifyListeners();

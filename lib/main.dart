@@ -13,6 +13,7 @@ import 'package:flutter_restaurant/provider/database_provider.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
 import 'package:flutter_restaurant/provider/preference_provider.dart';
+import 'package:flutter_restaurant/provider/reminder_provider.dart';
 import 'package:flutter_restaurant/utils/background_service.dart';
 import 'package:flutter_restaurant/utils/notification_helper.dart';
 import 'package:flutter_restaurant/utils/preference_helper.dart';
@@ -48,6 +49,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<DetailProvider>(
           create: (_) => DetailProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ReminderProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => PreferenceProvider(

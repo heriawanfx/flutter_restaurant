@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_restaurant/common/constant.dart';
+import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
+import 'package:flutter_restaurant/pages/main_page.dart';
 import 'package:flutter_restaurant/provider/database_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
@@ -96,19 +98,43 @@ class DetailPage extends StatelessWidget {
                 pinned: true,
                 expandedHeight: 250,
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Hero(
-                    tag: "${restaurant.id}",
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: "${Constant.baseImageUrl}/${restaurant.pictureId}",
-                      fit: BoxFit.cover,
-                    ),
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Hero(
+                        tag: "${restaurant.id}",
+                        child: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image:
+                              "${Constant.baseImageUrl}/${restaurant.pictureId}",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                begin: Alignment(0.0, 0.5),
+                                end: Alignment(0.0, 0.0),
+                                colors: [
+                              Color(0x00000000),
+                              Color(0x88000000),
+                            ])),
+                      ),
+                    ],
                   ),
                 ),
                 actions: [
                   IconButton(
                     onPressed: () {
                       provider.toggleFavorite(restaurant, isFavorited);
+                      if (!isFavorited) {
+                        context.showSnackbar(
+                          "Restoran ini telah difavoritkan",
+                          isSuccess: true,
+                        );
+                      } else {
+                        context.showSnackbar("Favorit telah dihapus");
+                      }
                     },
                     icon: Icon(
                         isFavorited ? Icons.favorite : Icons.favorite_outline),

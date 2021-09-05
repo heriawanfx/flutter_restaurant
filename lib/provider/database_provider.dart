@@ -1,20 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_restaurant/data/db/database_helper.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
+import 'package:flutter_restaurant/provider/state_provider.dart';
+import 'package:flutter_restaurant/utils/result_state.dart';
 
-class DatabaseProvider extends ChangeNotifier {
+class DatabaseProvider extends StateProvider {
   DatabaseHelper databaseHelper;
 
   DatabaseProvider({required this.databaseHelper}) {
-    _getFavorites();
+    loadFavorites();
   }
 
   List<Restaurant> _favorites = [];
   List<Restaurant> get favorites => _favorites;
 
-  void _getFavorites() async {
-    _favorites = await databaseHelper.getFavorites();
+  void loadFavorites() async {
+    state = ResultState.Loading;
     notifyListeners();
+    try {
+      final result = await databaseHelper.getFavorites();
+
+      state = ResultState.Success;
+      _favorites = result;
+    } catch (e) {
+      state = ResultState.Error;
+      error = "$e";
+      print("Error : $e");
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future<bool> isFavorited(Restaurant restaurant) async {
