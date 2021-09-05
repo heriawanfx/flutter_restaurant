@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_restaurant/common/constant.dart';
-import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:flutter_restaurant/pages/main_page.dart';
-import 'package:flutter_restaurant/provider/database_provider.dart';
+import 'package:flutter_restaurant/provider/favorite_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/utils/context_ext.dart';
+import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -25,28 +24,8 @@ class DetailPage extends StatelessWidget {
               child: const CircularProgressIndicator(),
             );
           case ResultState.Error:
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.running_with_errors_outlined,
-                    color: Colors.red,
-                    size: 100,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    "Ada masalah saat memuat data",
-                  ),
-                  SizedBox(height: 16),
-                  OutlinedButton(
-                    onPressed: () {
-                      provider.fetchRestaurantDetail();
-                    },
-                    child: const Text("Coba Lagi"),
-                  )
-                ],
-              ),
+            return ErrorStateWidget(
+              onTryAgain: () => provider.fetchRestaurantDetail(),
             );
           case ResultState.Success:
             final _restaurant = provider.restaurant;
@@ -87,7 +66,7 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _buildSliverAppBar(Restaurant restaurant) {
-    return Consumer<DatabaseProvider>(
+    return Consumer<FavoriteProvider>(
       builder: (context, provider, _) {
         return FutureBuilder(
           future: provider.isFavorited(restaurant),
@@ -112,13 +91,15 @@ class DetailPage extends StatelessWidget {
                       ),
                       DecoratedBox(
                         decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment(0.0, 0.5),
-                                end: Alignment(0.0, 0.0),
-                                colors: [
+                          gradient: LinearGradient(
+                            begin: Alignment(0.0, 0.5),
+                            end: Alignment(0.0, 0.0),
+                            colors: [
                               Color(0x00000000),
                               Color(0x88000000),
-                            ])),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -137,7 +118,8 @@ class DetailPage extends StatelessWidget {
                       }
                     },
                     icon: Icon(
-                        isFavorited ? Icons.favorite : Icons.favorite_outline),
+                      isFavorited ? Icons.favorite : Icons.favorite_outline,
+                    ),
                   )
                 ]);
           },
@@ -153,7 +135,11 @@ Widget _buildDescription(Restaurant _restaurant) {
     children: [
       Text(
         "${_restaurant.name}",
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
+          color: Colors.red,
+        ),
       ),
       SizedBox(height: 4),
       Text(
@@ -178,9 +164,11 @@ Widget _buildDescription(Restaurant _restaurant) {
       Text(
         "Kategori",
         style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 18, color: Colors.blueGrey),
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
       ),
-      _restaurant.categories == null || _restaurant.categories!.isEmpty
+      _restaurant.categories == null || _restaurant.categories?.isEmpty == true
           ? Container()
           : Container(
               height: 50,
@@ -222,9 +210,9 @@ Widget _buildGroupList(List<Name>? list, Type type) {
         child: Text(
           type == Type.Food ? "Makanan" : "Minuman",
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.blueGrey),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
       ),
       Container(
@@ -291,7 +279,6 @@ Widget _buildReviewList(BuildContext context, List<CustomerReview> reviews) {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: Colors.blueGrey,
           ),
         ),
       ),

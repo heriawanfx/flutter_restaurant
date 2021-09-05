@@ -9,7 +9,7 @@ import 'package:flutter_restaurant/data/db/database_helper.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
 import 'package:flutter_restaurant/pages/main_page.dart';
 import 'package:flutter_restaurant/pages/splash_page.dart';
-import 'package:flutter_restaurant/provider/database_provider.dart';
+import 'package:flutter_restaurant/provider/favorite_provider.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
 import 'package:flutter_restaurant/provider/preference_provider.dart';
@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => DatabaseProvider(
+          create: (_) => FavoriteProvider(
             databaseHelper: DatabaseHelper(),
           ),
         )
@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         title: Constant.appName,
-        theme: ThemeData(primarySwatch: Colors.blueGrey),
+        theme: ThemeData(primarySwatch: Colors.red),
         debugShowCheckedModeBanner: false,
         initialRoute: SplashPage.routeName,
         routes: {

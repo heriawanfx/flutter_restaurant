@@ -3,10 +3,10 @@ import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/provider/state_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 
-class DatabaseProvider extends StateProvider {
+class FavoriteProvider extends StateProvider {
   DatabaseHelper databaseHelper;
 
-  DatabaseProvider({required this.databaseHelper}) {
+  FavoriteProvider({required this.databaseHelper}) {
     loadFavorites();
   }
 
@@ -45,7 +45,7 @@ class DatabaseProvider extends StateProvider {
     } catch (e) {
       print("Error on toggleFavorite : $e");
     } finally {
-      notifyListeners();
+      loadFavorites();
     }
   }
 }

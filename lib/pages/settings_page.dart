@@ -26,6 +26,7 @@ class SettingsPage extends StatelessWidget {
         return ListView(
           children: [
             ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               title: Text("Pengingat harian"),
               subtitle: Text("Terima rekomendasi restoran setiap pukul 11.00"),
               trailing: Consumer<ReminderProvider>(

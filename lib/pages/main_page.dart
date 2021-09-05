@@ -19,6 +19,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    print("initState called");
     _notificationHelper
         .configureSelectNotificationSubject(DetailPage.routeName);
   }
