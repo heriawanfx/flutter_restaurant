@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_restaurant/data/api/api_service.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:flutter_restaurant/utils/state_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 
 class ListProvider extends ChangeNotifier {
@@ -50,6 +49,7 @@ class ListProvider extends ChangeNotifier {
     } catch (e) {
       _state = ResultState.Error;
       _error = "Error: $e";
+      print("Error : $e");
     } finally {
       notifyListeners();
     }

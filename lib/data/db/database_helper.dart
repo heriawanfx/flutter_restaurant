@@ -20,7 +20,7 @@ class DatabaseHelper {
              city TEXT,
              address TEXT,
              pictureId TEXT,
-             rating TEXT
+             rating DOUBLE
            )
         ''';
 
@@ -47,7 +47,7 @@ class DatabaseHelper {
           await batch.commit();
         }
       },
-      version: 1,
+      version: 2,
     );
 
     return db;
@@ -75,9 +75,11 @@ class DatabaseHelper {
   Future<List<Restaurant>> getFavorites() async {
     final db = await database;
     List<Map<String, dynamic>> results = await db!.query(_tblFavorite);
+    print('getFavorites ' + results[0].toString());
     Iterable<Restaurant> iterable = results.map((res) {
       return Restaurant.fromDatabase(res);
     });
+    print('getFavorites iterable' + iterable.toString());
     return iterable.toList();
   }
 
