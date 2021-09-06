@@ -14,7 +14,12 @@ void showSnackbar(String message,
 
   scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
   scaffoldMessengerKey.currentState?.showSnackBar(
-    SnackBar(backgroundColor: bgColor, content: Text(message), action: action),
+    SnackBar(
+      backgroundColor: bgColor,
+      content: Text(message),
+      action: action,
+      duration: Duration(seconds: 2),
+    ),
   );
 }
 

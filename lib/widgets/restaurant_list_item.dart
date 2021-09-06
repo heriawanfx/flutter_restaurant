@@ -8,8 +8,8 @@ import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:provider/provider.dart';
 
-class RestaurantTile extends StatelessWidget {
-  const RestaurantTile({
+class RestaurantListItem extends StatelessWidget {
+  const RestaurantListItem({
     Key? key,
     required Restaurant restaurant,
   })  : _restaurant = restaurant,

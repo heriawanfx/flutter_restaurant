@@ -8,7 +8,8 @@ import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
 import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/refresh_action_button.dart';
-import 'package:flutter_restaurant/widgets/restaurant_tile.dart';
+import 'package:flutter_restaurant/widgets/restaurant_grid_item.dart';
+import 'package:flutter_restaurant/widgets/restaurant_list_item.dart';
 import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -135,73 +136,7 @@ Widget _buildListItem(BuildContext context, List<Restaurant> restaurants) {
     crossAxisSpacing: 4,
     padding: const EdgeInsets.all(4),
     children: restaurants.map((item) {
-      return Stack(
-        children: [
-          FadeInImage.memoryNetwork(
-              height: double.infinity,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              placeholder: kTransparentImage,
-              image: "${Constant.baseImageUrl}/${item.pictureId}"),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment(0.0, 0.0),
-                end: Alignment(0.0, 0.5),
-                colors: [
-                  Color(0x00000000),
-                  Color(0x88000000),
-                ],
-              ),
-            ),
-            child: Container(),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              height: 55,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${item.name}",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 15),
-                    ),
-                    TextIcon(
-                        iconData: Icons.room_outlined,
-                        text: "${item.city}",
-                        color: Colors.white.withOpacity(0.7)),
-                    TextIcon(
-                        iconData: Icons.star_outline_outlined,
-                        text: "${item.rating}",
-                        color: Colors.white.withOpacity(0.7))
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              highlightColor: Colors.black.withOpacity(0.1),
-              splashColor: Colors.black.withOpacity(0.1),
-              onTap: () {
-                Navigation.pushNamed(DetailPage.routeName);
-                context.read<DetailProvider>().setSelectedId("${item.id}");
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-              ),
-            ),
-          ),
-        ],
-      );
+      return RestaurantGridItem(restaurant: item);
     }).toList(),
   );
 }

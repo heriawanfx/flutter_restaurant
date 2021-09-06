@@ -5,7 +5,7 @@ import 'package:flutter_restaurant/provider/favorite_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/refresh_action_button.dart';
-import 'package:flutter_restaurant/widgets/restaurant_tile.dart';
+import 'package:flutter_restaurant/widgets/restaurant_list_item.dart';
 import 'package:provider/provider.dart';
 
 class FavoritePage extends StatelessWidget {
@@ -49,7 +49,7 @@ class FavoritePage extends StatelessWidget {
             return ListView.builder(
               itemCount: favorites.length,
               itemBuilder: (context, index) {
-                return RestaurantTile(restaurant: favorites[index]);
+                return RestaurantListItem(restaurant: favorites[index]);
               },
             );
         }
