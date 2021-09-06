@@ -81,7 +81,7 @@ class DetailPage extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       Hero(
-                        tag: "${restaurant.id}",
+                        tag: "${restaurant.pictureId}",
                         child: FadeInImage.memoryNetwork(
                           placeholder: kTransparentImage,
                           image:

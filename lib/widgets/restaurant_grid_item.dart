@@ -17,12 +17,15 @@ class RestaurantGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        FadeInImage.memoryNetwork(
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.cover,
-            placeholder: kTransparentImage,
-            image: "${Constant.baseImageUrl}/${restaurant.pictureId}"),
+        Hero(
+          tag: "${restaurant.pictureId}",
+          child: FadeInImage.memoryNetwork(
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              placeholder: kTransparentImage,
+              image: "${Constant.baseImageUrl}/${restaurant.pictureId}"),
+        ),
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
