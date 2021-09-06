@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restaurant/common/constant.dart';
-import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:flutter_restaurant/pages/detail_page.dart';
-import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
 import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/refresh_action_button.dart';
 import 'package:flutter_restaurant/widgets/restaurant_grid_item.dart';
-import 'package:flutter_restaurant/widgets/restaurant_list_item.dart';
-import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatelessWidget {
   static const String title = 'Beranda';
