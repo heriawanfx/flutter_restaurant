@@ -1,9 +1,9 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:flutter_restaurant/common/global.dart';
 import 'package:flutter_restaurant/data/api/api_service.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:flutter_restaurant/main.dart';
 import 'package:flutter_restaurant/utils/notification_helper.dart';
 
 final ReceivePort port = ReceivePort();
@@ -19,19 +19,18 @@ class BackgroundService {
 
   factory BackgroundService() => _instance ?? BackgroundService._internal();
 
-  void initializeIsolate() {
+  void registerPort() {
     IsolateNameServer.registerPortWithName(
       port.sendPort,
       _isolateName,
     );
   }
 
-  static Future<void> callback() async {
-    print('Alarm fired!');
+  static Future<void> notificationCallback() async {
+    print('Alarm active!');
     final NotificationHelper _notificationHelper = NotificationHelper();
     List<Restaurant> result = await ApiService().getRestaurants("");
-    await _notificationHelper.showNotification(
-        flutterLocalNotificationsPlugin, result);
+    await _notificationHelper.showNotification(notificationsPlugin, result);
 
     _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);
     _uiSendPort?.send(null);

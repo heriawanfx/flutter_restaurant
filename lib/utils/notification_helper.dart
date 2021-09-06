@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_restaurant/common/global.dart';
 import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
-import 'package:rxdart/rxdart.dart';
-
-final selectNotificationSubject = BehaviorSubject<String>();
+import 'package:flutter_restaurant/provider/detail_provider.dart';
 
 class NotificationHelper {
   static NotificationHelper? _instance;
@@ -18,68 +18,67 @@ class NotificationHelper {
   factory NotificationHelper() => _instance ?? NotificationHelper._internal();
 
   Future<void> initNotifications(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
-    var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+      FlutterLocalNotificationsPlugin notificationsPlugin) async {
+    final androidSettings = AndroidInitializationSettings('app_icon');
 
-    var initializationSettingsIOS = IOSInitializationSettings(
+    final iOSSettings = IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
 
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    final platformInitializationSettings =
+        InitializationSettings(android: androidSettings, iOS: iOSSettings);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    await notificationsPlugin.initialize(platformInitializationSettings,
         onSelectNotification: (String? payload) async {
-      if (payload != null) {
-        print('notification payload: ' + payload);
-      }
-      selectNotificationSubject.add(payload ?? 'empty payload');
+      selectedPayloadSubject.add(payload ?? 'empty payload');
     });
   }
 
   Future<void> showNotification(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+      FlutterLocalNotificationsPlugin notificationsPlugin,
       List<Restaurant> list) async {
-    var _channelId = "1";
-    var _channelName = "channel_01";
-    var _channelDescription = "dicoding restaurant channel";
+    final channelId = "1";
+    final channelName = "channel_01";
+    final channelDescription = "dicoding restaurant channel";
 
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      _channelId,
-      _channelName,
-      _channelDescription,
+    final androidNotificationDetail = AndroidNotificationDetails(
+      channelId,
+      channelName,
+      channelDescription,
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
       styleInformation: DefaultStyleInformation(true, true),
     );
 
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
+    final iOSNotificationDetail = IOSNotificationDetails();
+    final platformNotificationDetail = NotificationDetails(
+        android: androidNotificationDetail, iOS: iOSNotificationDetail);
 
-    final random = Random().nextInt(list.length - 1);
+    final index = Random().nextInt(list.length - 1);
+    //final index = 2;
 
-    var titleNotification = "<b>Dicoding Restauarant</b>";
-    var titleNews = list[random].name;
+    final titleNotification = "<b>Dicoding Restaurant</b>";
+    final titleNews = list[index].name;
 
-    final articleJson = list[random].toJson();
+    final articleJson = list[index].toJson();
 
-    await flutterLocalNotificationsPlugin.show(
-        0, titleNotification, titleNews, platformChannelSpecifics,
+    await notificationsPlugin.show(
+        0, titleNotification, titleNews, platformNotificationDetail,
         payload: jsonEncode(articleJson));
   }
 
-  void configureSelectNotificationSubject(String route) {
-    selectNotificationSubject.stream.listen(
-      (String payload) async {
+  void handleNotification(String route) {
+    selectedPayloadSubject.stream.listen(
+      (payload) async {
         final json = jsonDecode(payload);
-        var item = Restaurant.fromJson(json);
-        Navigation.pushNamed(route, arguments: item);
+        final item = Restaurant.fromJson(json);
+        Navigation.pushNamed(route);
+        scaffoldMessengerKey.currentContext
+            ?.read<DetailProvider>()
+            .setSelectedId("${item.id}");
       },
     );
   }

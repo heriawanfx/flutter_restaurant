@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_restaurant/common/global.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
 import 'package:flutter_restaurant/pages/favorite_page.dart';
 import 'package:flutter_restaurant/pages/home_page.dart';
@@ -19,14 +20,12 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    print("initState called");
-    _notificationHelper
-        .configureSelectNotificationSubject(DetailPage.routeName);
+    _notificationHelper.handleNotification(DetailPage.routeName);
   }
 
   @override
   void dispose() {
-    selectNotificationSubject.close();
+    selectedPayloadSubject.close();
     super.dispose();
   }
 

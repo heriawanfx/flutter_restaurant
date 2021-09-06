@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_restaurant/common/constant.dart';
+import 'package:flutter_restaurant/common/navigation.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
+import 'package:flutter_restaurant/pages/detail_page.dart';
+import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
 import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/refresh_action_button.dart';
 import 'package:flutter_restaurant/widgets/restaurant_tile.dart';
+import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatelessWidget {
   static const String title = 'Beranda';
@@ -123,12 +129,79 @@ Widget _buildFuture(BuildContext context, ListProvider provider) {
 }
 
 Widget _buildListItem(BuildContext context, List<Restaurant> restaurants) {
-  return ListView.builder(
-      shrinkWrap: true,
-      itemCount: restaurants.length,
-      itemBuilder: (context, index) {
-        final _restaurant = restaurants[index];
-
-        return RestaurantTile(restaurant: _restaurant);
-      });
+  return GridView.count(
+    crossAxisCount: 2,
+    mainAxisSpacing: 4,
+    crossAxisSpacing: 4,
+    padding: const EdgeInsets.all(4),
+    children: restaurants.map((item) {
+      return Stack(
+        children: [
+          FadeInImage.memoryNetwork(
+              height: double.infinity,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              placeholder: kTransparentImage,
+              image: "${Constant.baseImageUrl}/${item.pictureId}"),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(0.0, 0.0),
+                end: Alignment(0.0, 0.5),
+                colors: [
+                  Color(0x00000000),
+                  Color(0x88000000),
+                ],
+              ),
+            ),
+            child: Container(),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: 55,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${item.name}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 15),
+                    ),
+                    TextIcon(
+                        iconData: Icons.room_outlined,
+                        text: "${item.city}",
+                        color: Colors.white.withOpacity(0.7)),
+                    TextIcon(
+                        iconData: Icons.star_outline_outlined,
+                        text: "${item.rating}",
+                        color: Colors.white.withOpacity(0.7))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              highlightColor: Colors.black.withOpacity(0.1),
+              splashColor: Colors.black.withOpacity(0.1),
+              onTap: () {
+                Navigation.pushNamed(DetailPage.routeName);
+                context.read<DetailProvider>().setSelectedId("${item.id}");
+              },
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+              ),
+            ),
+          ),
+        ],
+      );
+    }).toList(),
+  );
 }

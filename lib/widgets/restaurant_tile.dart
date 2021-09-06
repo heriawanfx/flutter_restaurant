@@ -40,7 +40,7 @@ class RestaurantTile extends StatelessWidget {
           TextIcon(iconData: Icons.room_outlined, text: "${_restaurant.city}"),
           TextIcon(
               iconData: Icons.star_outline_outlined,
-              text: _restaurant.rating.toString())
+              text: "${_restaurant.rating}")
         ],
       ),
       onTap: () {

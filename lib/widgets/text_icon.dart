@@ -4,9 +4,14 @@ class TextIcon extends StatelessWidget {
   final IconData iconData;
   final String text;
   final double size;
+  final Color color;
 
   TextIcon(
-      {Key? key, required this.iconData, required this.text, this.size = 13})
+      {Key? key,
+      required this.iconData,
+      required this.text,
+      this.size = 13,
+      this.color = Colors.black87})
       : super(key: key);
 
   @override
@@ -16,6 +21,7 @@ class TextIcon extends StatelessWidget {
         Icon(
           iconData,
           size: size,
+          color: color,
         ),
         SizedBox(
           width: 4,
@@ -24,9 +30,7 @@ class TextIcon extends StatelessWidget {
           child: Text(
             "$text",
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: size,
-            ),
+            style: TextStyle(fontSize: size, color: color),
           ),
         ),
       ],

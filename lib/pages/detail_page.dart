@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_restaurant/common/constant.dart';
+import 'package:flutter_restaurant/common/global.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
 import 'package:flutter_restaurant/provider/favorite_provider.dart';
 import 'package:flutter_restaurant/utils/result_state.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
-import 'package:flutter_restaurant/utils/context_ext.dart';
 import 'package:flutter_restaurant/widgets/error_state_widget.dart';
 import 'package:flutter_restaurant/widgets/text_icon.dart';
 import 'package:provider/provider.dart';
@@ -109,12 +109,12 @@ class DetailPage extends StatelessWidget {
                     onPressed: () {
                       provider.toggleFavorite(restaurant, isFavorited);
                       if (!isFavorited) {
-                        context.showSnackbar(
+                        showSnackbar(
                           "Restoran ini telah difavoritkan",
                           isSuccess: true,
                         );
                       } else {
-                        context.showSnackbar("Favorit telah dihapus");
+                        showSnackbar("Favorit telah dihapus");
                       }
                     },
                     icon: Icon(
@@ -223,8 +223,10 @@ Widget _buildGroupList(List<Name>? list, Type type) {
             itemCount: list.length,
             itemBuilder: (context, index) {
               return InkWell(
+                highlightColor: Colors.black.withOpacity(0.1),
+                splashColor: Colors.black.withOpacity(0.1),
                 onTap: () {
-                  context.showSnackbar("Fitur ini belum tersedia");
+                  showSnackbar("Fitur ini belum tersedia");
                 },
                 child: Card(
                   elevation: 0,

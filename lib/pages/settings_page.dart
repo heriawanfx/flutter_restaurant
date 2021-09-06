@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_restaurant/common/global.dart';
 import 'package:flutter_restaurant/provider/preference_provider.dart';
 import 'package:flutter_restaurant/provider/reminder_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_restaurant/utils/context_ext.dart';
 
 class SettingsPage extends StatelessWidget {
   static const String title = 'Setelan';
@@ -38,13 +38,13 @@ class SettingsPage extends StatelessWidget {
                         provider.setDailyRemainder(isChecked);
                         reminder.setReminder(isChecked);
                         if (isChecked) {
-                          context.showSnackbar("Pengingat harian telah aktif",
+                          showSnackbar("Pengingat harian telah aktif",
                               isSuccess: true);
                         } else {
-                          context.showSnackbar("Pengingat harian dibatalkan");
+                          showSnackbar("Pengingat harian dibatalkan");
                         }
                       } else {
-                        context.showSnackbar("Fitur ini belum tersedia");
+                        showSnackbar("Fitur ini belum tersedia");
                       }
                     },
                   );

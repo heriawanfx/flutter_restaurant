@@ -1,6 +1,4 @@
-import 'package:flutter/widgets.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+import 'package:flutter_restaurant/common/global.dart';
 
 class Navigation {
   static pushNamed(String routeName,

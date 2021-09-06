@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_restaurant/common/constant.dart';
-import 'package:flutter_restaurant/common/navigation.dart';
+import 'package:flutter_restaurant/common/global.dart';
 import 'package:flutter_restaurant/data/db/database_helper.dart';
 import 'package:flutter_restaurant/pages/detail_page.dart';
 import 'package:flutter_restaurant/pages/main_page.dart';
-import 'package:flutter_restaurant/pages/splash_page.dart';
 import 'package:flutter_restaurant/provider/favorite_provider.dart';
 import 'package:flutter_restaurant/provider/detail_provider.dart';
 import 'package:flutter_restaurant/provider/list_provider.dart';
@@ -20,21 +18,18 @@ import 'package:flutter_restaurant/utils/preference_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final NotificationHelper _notificationHelper = NotificationHelper();
   final BackgroundService _service = BackgroundService();
 
-  _service.initializeIsolate();
+  _service.registerPort();
 
   if (Platform.isAndroid) {
     await AndroidAlarmManager.initialize();
   }
-  await _notificationHelper.initNotifications(flutterLocalNotificationsPlugin);
+  await _notificationHelper.initNotifications(notificationsPlugin);
 
   runApp(MyApp());
 }
@@ -68,12 +63,12 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
+        scaffoldMessengerKey: scaffoldMessengerKey,
         title: Constant.appName,
         theme: ThemeData(primarySwatch: Colors.red),
         debugShowCheckedModeBanner: false,
-        initialRoute: SplashPage.routeName,
+        initialRoute: MainPage.routeName,
         routes: {
-          SplashPage.routeName: (c) => SplashPage(),
           MainPage.routeName: (c) => MainPage(),
           DetailPage.routeName: (c) => DetailPage()
         },
