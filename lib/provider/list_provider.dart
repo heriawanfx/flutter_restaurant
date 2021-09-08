@@ -36,7 +36,7 @@ class ListProvider extends StateProvider {
     notifyListeners();
 
     try {
-      final result = await ApiService().getRestaurants(_query);
+      final result = await ApiService().getRestaurants(query: _query);
 
       state = ResultState.Success;
       _restaurants = result;

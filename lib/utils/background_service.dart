@@ -29,7 +29,7 @@ class BackgroundService {
   static Future<void> notificationCallback() async {
     print('Alarm active!');
     final NotificationHelper _notificationHelper = NotificationHelper();
-    List<Restaurant> result = await ApiService().getRestaurants("");
+    List<Restaurant> result = await ApiService().getRestaurants();
     await _notificationHelper.showNotification(notificationsPlugin, result);
 
     _uiSendPort ??= IsolateNameServer.lookupPortByName(_isolateName);

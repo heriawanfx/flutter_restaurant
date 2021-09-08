@@ -12,7 +12,7 @@ class ApiService {
 
   factory ApiService() => _instance ?? ApiService._internal();
 
-  Future<List<Restaurant>> getRestaurants(String query) async {
+  Future<List<Restaurant>> getRestaurants({String query = ""}) async {
     String path = Constant.pathList;
     Map<String, dynamic>? queryParams = {};
 
