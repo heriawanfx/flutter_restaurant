@@ -1,16 +1,21 @@
 import 'dart:convert';
 import 'package:flutter_restaurant/common/constant.dart';
 import 'package:flutter_restaurant/data/models/restaurant.dart';
+import 'package:http/http.dart' show Client;
 import 'package:http/http.dart' as http;
 
 class ApiService {
+  Client client = Client();
   static ApiService? _instance;
 
   ApiService._internal() {
+    this.client = Client();
     _instance = this;
   }
 
-  factory ApiService() => _instance ?? ApiService._internal();
+  factory ApiService() {
+    return _instance ?? ApiService._internal();
+  }
 
   Future<List<Restaurant>> getRestaurants({String query = ""}) async {
     String path = Constant.pathList;
@@ -22,7 +27,7 @@ class ApiService {
     }
 
     Uri uri = Uri.https(Constant.baseUrl, path, queryParams);
-    http.Response response = await http.get(uri);
+    http.Response response = await client.get(uri);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonBody = jsonDecode(response.body);
@@ -39,7 +44,7 @@ class ApiService {
   Future<Restaurant> getRestaurantDetail(String restaurantId) async {
     Uri uri =
         Uri.https(Constant.baseUrl, "${Constant.pathDetail}/$restaurantId");
-    http.Response response = await http.get(uri);
+    http.Response response = await client.get(uri);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonBody = jsonDecode(response.body);

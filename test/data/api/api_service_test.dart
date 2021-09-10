@@ -16,6 +16,8 @@ void main() {
       final client = MockClient();
 
       Uri uri = Uri.https(Constant.baseUrl, Constant.pathList);
+      final apiService = ApiService();
+      apiService.client = client;
       when(client.get(uri)).thenAnswer((_) async {
         final response = http.Response(
             '{"error": false,"message": "success","count": 0,"restaurants": []}',
