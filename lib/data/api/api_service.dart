@@ -9,7 +9,7 @@ class ApiService {
   static ApiService? _instance;
 
   ApiService._internal() {
-    this.client = Client();
+    this.client = client;
     _instance = this;
   }
 
