@@ -17,6 +17,7 @@ import 'package:flutter_restaurant/utils/notification_helper.dart';
 import 'package:flutter_restaurant/utils/preference_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +25,20 @@ Future<void> main() async {
   final NotificationHelper _notificationHelper = NotificationHelper();
   final BackgroundService _service = BackgroundService();
 
-  _service.registerPort();
+  if ((defaultTargetPlatform == TargetPlatform.iOS) || (defaultTargetPlatform == TargetPlatform.android)) {
+    _service.registerPort();
 
-  if (Platform.isAndroid) {
-    await AndroidAlarmManager.initialize();
+    if (Platform.isAndroid) {
+      await AndroidAlarmManager.initialize();
+    }
+    await _notificationHelper.initNotifications(notificationsPlugin);
   }
-  await _notificationHelper.initNotifications(notificationsPlugin);
+  else if ((defaultTargetPlatform == TargetPlatform.linux) || (defaultTargetPlatform == TargetPlatform.macOS) || (defaultTargetPlatform == TargetPlatform.windows)) {
+      // Some desktop specific code there
+  }
+  else {
+      // Some web specific code there
+  }
 
   runApp(MyApp());
 }
